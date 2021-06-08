@@ -61,9 +61,11 @@ class BaseScreenState extends State<BaseScreen> {
   }
 
   Widget _renderBottom(BuildContext context) {
-    return BottomButtonWidgetMapper.map(
-        page.bottom,
-        (page.children
+    return BottomButtonWidgetMapper.map(page.bottom, _onPressButton());
+  }
+
+  _onPressButton() {
+    return (page.children
                     .whereType<BdcInputComponent>()
                     .where(
                         (element) => _controllers[element.id].value.text == "")
@@ -107,14 +109,14 @@ class BaseScreenState extends State<BaseScreen> {
                         ),
                       ],
                     );
-                  }
-                : () {
-                    _saveParams();
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => BaseScreen(_index + 1)));
-                  }));
+              }
+            : () {
+                _saveParams();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => BaseScreen(_index + 1)));
+              });
   }
 
   _saveParams() {

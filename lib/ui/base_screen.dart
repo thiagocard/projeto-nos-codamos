@@ -47,30 +47,39 @@ class BaseScreenState extends State<BaseScreen> {
     );
   }
 
-  Widget _renderBottom()  {
+  Widget _renderBottom() {
     return BottomButtonWidgetMapper.map(
         page.bottom,
-        page.bottom.action != null
-            ? () {
-          _saveParams();
-          var provider = Provider.of<AppProvider>(context, listen: false);
-          provider.repository.doAction(page.bottom.action, provider.params);
-        }
-            : () {
-          _saveParams();
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => BaseScreen(_index + 1)));
-        });
+        (page.children
+                    .whereType<BdcInputComponent>()
+                    .where(
+                        (element) => _controllers[element.id].value.text == "")
+                    .toList()
+                    .length >
+                0
+            ? null // Check elements
+            : page.bottom.action != null
+                ? () {
+                    _saveParams();
+                    var provider =
+                        Provider.of<AppProvider>(context, listen: false);
+                    provider.repository
+                        .doAction(page.bottom.action, provider.params);
+                  }
+                : () {
+                    _saveParams();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => BaseScreen(_index + 1)));
+                  }));
   }
 
   _saveParams() {
     page.children.forEach((child) {
       if (child is BdcInputComponent) {
-        Provider
-            .of<AppProvider>(context, listen: false)
-            .params[child.id] = _controllers[child.id].value.text;
+        Provider.of<AppProvider>(context, listen: false).params[child.id] =
+            _controllers[child.id].value.text;
       }
     });
   }
@@ -81,8 +90,14 @@ class BaseScreenState extends State<BaseScreen> {
         case BdcComponent.header:
           return HeaderWidgetMapper.map(child);
         case BdcComponent.input:
-          _controllers[(child as BdcInputComponent).id] = TextEditingController();
-          return InputWidgetMapper.map(child, _controllers[(child as BdcInputComponent).id]);
+          var id = (child as BdcInputComponent).id;
+          if (_controllers[id] == null) {
+            _controllers[id] = TextEditingController();
+            _controllers[id].addListener(() {
+              setState(() {});
+            });
+          }
+          return InputWidgetMapper.map(child, _controllers[id]);
         default:
           return null;
       }

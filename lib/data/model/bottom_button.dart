@@ -13,6 +13,7 @@ class BdcBottomButton extends BdcComponent {
 class BdcBottomButtonAction {
   final String method;
   final String uri;
+  final List<String> steps;
 
-  BdcBottomButtonAction({this.method, this.uri});
+  BdcBottomButtonAction({this.method, this.uri, this.steps});
 }

@@ -54,7 +54,8 @@ class AcquisitionRepositoryImpl extends AcquisitionRepository {
             action: item['action'] != null
                 ? BdcBottomButtonAction(
                     method: item['action']['method'],
-                    uri: item['action']['uri'])
+                    uri: item['action']['uri'],
+                    steps: List<String>.from(item['action']['steps']))
                 : null);
       default:
         throw Exception('Cant\'t handle item of type $type');

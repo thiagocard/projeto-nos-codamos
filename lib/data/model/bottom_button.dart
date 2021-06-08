@@ -1,8 +1,8 @@
-import 'package:nos_codamos/data/model/bdc_component.dart';
+import 'acquisition_flow.dart';
 
 class BdcBottomButton extends BdcComponent {
   final String text;
   final String style;
 
-  BdcBottomButton({this.text, this.style});
+  BdcBottomButton({this.text, this.style}) : super(BdcComponent.bottomButton);
 }

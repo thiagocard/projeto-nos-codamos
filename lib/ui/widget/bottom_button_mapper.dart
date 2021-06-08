@@ -4,9 +4,10 @@ import 'package:nuds_mobile/nuds_mobile.dart';
 
 class BottomButtonWidgetMapper {
 
-  BottomsButtonWidgetMapper._();
+  BottomButtonWidgetMapper._();
 
   static BottomBar map(BdcBottomButton bdcBottomButton, onPress) {
     return BottomBar(primary: BottomBarAction(onPressed: onPress, child: Text(bdcBottomButton.text,)));
   }
+
 }

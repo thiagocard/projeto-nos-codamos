@@ -3,7 +3,6 @@ import 'package:nos_codamos/data/repository/acquisition_repository.dart';
 import 'package:nos_codamos/ui/country_selection.dart';
 import 'package:provider/provider.dart';
 import 'package:splashscreen/splashscreen.dart';
-import 'dart:io' show Platform;
 
 import 'data/remote/acquisition_api.dart';
 
@@ -16,7 +15,7 @@ void main() {
   );
 }
 
-class AppProvider extends ChangeNotifier {
+class AppProvider extends FutureProvider {
   final AcquisitionRepositoryImpl repository =
       AcquisitionRepositoryImpl(AcquisitionApi());
   final Map<String, String> params = {};

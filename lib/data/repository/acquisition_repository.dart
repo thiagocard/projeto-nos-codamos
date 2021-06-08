@@ -8,11 +8,12 @@ import 'package:nos_codamos/data/remote/acquisition_api.dart';
 
 abstract class AcquisitionRepository {
   Future<void> postCountry(String countryCode);
-  Future<void> submit(Map<String, String> params);
+
+  Future<void> doAction(
+      BdcBottomButtonAction action, Map<String, String> params);
 }
 
 class AcquisitionRepositoryImpl extends AcquisitionRepository {
-
   final AcquisitionApi _api;
   AcquisitionFlow acquisitionFlow;
 
@@ -20,19 +21,20 @@ class AcquisitionRepositoryImpl extends AcquisitionRepository {
 
   @override
   Future<void> postCountry(String countryCode) async {
-    final response = await _api.postCountry(countryCode);
+    final response = await _api.get(countryCode);
     if (response.statusCode == 200) {
       final screen = jsonDecode(response.body);
       final List pages = screen['pages'];
+
       List<BdcPage> bdcPages = pages.map((page) {
         final List children = page['children'];
-        final List<BdcComponent> childComponents = children.map((child) {
-          mapComponent(child);
-        }).toList();
+        final List<BdcComponent> childComponents =
+            children.map((child) => mapComponent(child)).toList();
         final bottom = page['bottom'];
-        BdcBottomButton bottomComponent = (bottom != null) ? mapComponent(bottom) : null;
+        BdcBottomButton bottomComponent =
+            (bottom != null) ? mapComponent(bottom) : null;
         return BdcPage(childComponents, bottomComponent);
-      });
+      }).toList();
       acquisitionFlow = AcquisitionFlow(bdcPages);
     } else {
       return null;
@@ -41,20 +43,34 @@ class AcquisitionRepositoryImpl extends AcquisitionRepository {
 
   BdcComponent mapComponent(Map<String, dynamic> item) {
     final type = item['type'];
-    switch(type) {
+    switch (type) {
       case BdcComponent.header:
         return BdcHeader(title: item['title'], subtitle: item['subtitle']);
       case BdcComponent.input:
-        return BdcInput(id: item['title'], placeholder: item['subtitle']);
+        return BdcInput(id: item['id'], keyboard: item['keyboard']);
       case BdcComponent.bottomButton:
-        return BdcBottomButton(text: item['title'], style: item['subtitle']);
-      default: throw Exception('Cant\'t handle item of type $type');
+        return BdcBottomButton(
+            text: item['text'],
+            action: item['action'] != null
+                ? BdcBottomButtonAction(
+                    method: item['action']['method'],
+                    uri: item['action']['uri'])
+                : null);
+      default:
+        throw Exception('Cant\'t handle item of type $type');
     }
   }
 
   @override
-  Future<void> submit(Map<String, String> params) {
-    throw UnimplementedError();
+  Future<void> doAction(
+      BdcBottomButtonAction action, Map<String, String> params) {
+    switch (action.method) {
+      case 'post':
+        return _api.post(action.uri, params);
+      case 'get':
+        return _api.get(action.uri);
+      default:
+        throw UnimplementedError();
+    }
   }
-
 }

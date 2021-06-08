@@ -14,8 +14,15 @@ class BdcPage {
   BdcPage(this.children, this.bottom);
 }
 
-abstract class BdcComponent {
+abstract class BdcInputComponent extends BdcComponent {
+  String id;
+  String type;
 
+  BdcInputComponent(this.id, this.type) : super(type);
+
+}
+
+abstract class BdcComponent {
   static const header = 'Header';
   static const input = 'Input';
   static const bottomButton = 'BottomButton';

@@ -1,8 +1,9 @@
 import 'acquisition_flow.dart';
 
-class BdcInput extends BdcComponent {
+class BdcInput extends BdcInputComponent {
   final String id;
-  final String placeholder;
+  final String keyboard;
 
-  BdcInput({this.id, this.placeholder}) : super(BdcComponent.input);
+  BdcInput({this.id, this.keyboard}) : super(id, BdcComponent.input);
+
 }

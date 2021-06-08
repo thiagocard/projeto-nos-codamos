@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:nos_codamos/data/model/acquisition_flow.dart';
-import 'package:nos_codamos/data/model/input.dart';
 import 'package:nos_codamos/main.dart';
 import 'package:nos_codamos/ui/widget/bottom_button_mapper.dart';
 import 'package:nos_codamos/ui/widget/header_mapper.dart';
@@ -36,10 +35,10 @@ class BaseScreenState extends State<BaseScreen> {
   @override
   Widget build(BuildContext context) {
     return Screen(
-      // top: TopBar(
-      //   backgroundColor: Colors.white,
-      //   elevation: 0,
-      // ),
+      top: TopBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+      ),
       body: Column(
         children: _render(context),
       ),

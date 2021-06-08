@@ -26,8 +26,7 @@ class BaseScreenState extends State<BaseScreen> {
   @override
   void initState() {
     super.initState();
-    page = Provider
-        .of<AppProvider>(context, listen: false)
+    page = Provider.of<AppProvider>(context, listen: false)
         .repository
         .acquisitionFlow
         .pages[_index];
@@ -65,51 +64,49 @@ class BaseScreenState extends State<BaseScreen> {
 
   _onPressButton() {
     return (page.children
-        .whereType<BdcInputComponent>()
-        .where((element) => _controllers[element.id].value.text == "")
-        .toList()
-        .length >
-        0
+                .whereType<BdcInputComponent>()
+                .where((element) => _controllers[element.id].value.text == "")
+                .toList()
+                .length >
+            0
         ? null // Check elements
         : page.bottom.action != null
-        ? () {
-      _saveParams();
-      var provider = Provider.of<AppProvider>(context, listen: false);
+            ? () {
+                _saveParams();
+                var provider = Provider.of<AppProvider>(context, listen: false);
 
-      presentTransitionScreen(
-        context: context,
-        semanticsLabel: 'Creating your account, please wait',
+                presentTransitionScreen(
+                  context: context,
+                  semanticsLabel: 'Creating your account, please wait',
 
-        /// What should happen when transitions
-        /// successfully finished
-        onTransitionEnd: () => Navigator.of(context).pop(),
+                  /// What should happen when transitions
+                  /// successfully finished
+                  onTransitionEnd: () => Navigator.of(context).pop(),
 
-        /// callback must return an error screen (Widget)
-        /// in case a transition's computation
-        /// raises an exception
-        onErrorBuilder: (context, error, retry) =>
-            _errorScreen(context, error, retry),
+                  /// callback must return an error screen (Widget)
+                  /// in case a transition's computation
+                  /// raises an exception
+                  onErrorBuilder: (context, error, retry) =>
+                      _errorScreen(context, error, retry),
 
-        /// Describe your transition steps here
-        steps:
-        _buildTransitionSteps(provider, page.bottom.action.steps),
-      );
-    }
-        : () {
-      _saveParams();
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BaseScreen(_index + 1)));
-    });
+                  /// Describe your transition steps here
+                  steps:
+                      _buildTransitionSteps(provider, page.bottom.action.steps),
+                );
+              }
+            : () {
+                _saveParams();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => BaseScreen(_index + 1)));
+              });
   }
 
   _saveParams() {
     page.children.forEach((child) {
       if (child is BdcInputComponent) {
-        Provider
-            .of<AppProvider>(context, listen: false)
-            .params[child.id] =
+        Provider.of<AppProvider>(context, listen: false).params[child.id] =
             _controllers[child.id].value.text;
       }
     });
@@ -142,7 +139,10 @@ class BaseScreenState extends State<BaseScreen> {
       steps.asMap().forEach((index, step) {
         final transitionStep = TransitionStep(
           text: step,
-          asyncComputation: _displayStepName,
+          asyncComputation: index == steps.length - 1
+              ? () => provider.repository
+                  .doAction(page.bottom.action, provider.params)
+              : _displayStepName,
         );
         transitionSteps.add(transitionStep);
       });

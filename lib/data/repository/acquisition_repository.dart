@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:http/http.dart' show Response;
 import 'package:nos_codamos/data/model/acquisition_flow.dart';
 import 'package:nos_codamos/data/model/bottom_button.dart';
 import 'package:nos_codamos/data/model/header.dart';
@@ -9,7 +10,7 @@ import 'package:nos_codamos/data/remote/acquisition_api.dart';
 abstract class AcquisitionRepository {
   Future<void> postCountry(String countryCode);
 
-  Future<void> doAction(
+  Future<Response> doAction(
       BdcBottomButtonAction action, Map<String, String> params);
 }
 
@@ -63,7 +64,7 @@ class AcquisitionRepositoryImpl extends AcquisitionRepository {
   }
 
   @override
-  Future<void> doAction(
+  Future<Response> doAction(
       BdcBottomButtonAction action, Map<String, String> params) {
     switch (action.method) {
       case 'post':

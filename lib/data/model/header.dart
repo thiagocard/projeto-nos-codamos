@@ -5,4 +5,6 @@ class BdcHeader extends BdcComponent {
   final String subtitle;
 
   BdcHeader({this.title, this.subtitle}) : super(BdcComponent.header);
+
+
 }

@@ -23,8 +23,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc:
+  provider:
   http:
+  splashscreen:
   nuds:
     git:
       url: git@github.com:nubank/nuds.git

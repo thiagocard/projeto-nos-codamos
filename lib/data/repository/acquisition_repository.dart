@@ -7,17 +7,19 @@ import 'package:nos_codamos/data/model/input.dart';
 import 'package:nos_codamos/data/remote/acquisition_api.dart';
 
 abstract class AcquisitionRepository {
-  Future<AcquisitionFlow> postCountry(String countryCode);
+  Future<void> postCountry(String countryCode);
+  Future<void> submit(Map<String, String> params);
 }
 
 class AcquisitionRepositoryImpl extends AcquisitionRepository {
 
   final AcquisitionApi _api;
+  AcquisitionFlow acquisitionFlow;
 
   AcquisitionRepositoryImpl(this._api);
 
   @override
-  Future<AcquisitionFlow> postCountry(String countryCode) async {
+  Future<void> postCountry(String countryCode) async {
     final response = await _api.postCountry(countryCode);
     if (response.statusCode == 200) {
       final screen = jsonDecode(response.body);
@@ -28,13 +30,10 @@ class AcquisitionRepositoryImpl extends AcquisitionRepository {
           mapComponent(child);
         }).toList();
         final bottom = page['bottom'];
-        if (bottom != null) {
-          final bottomComponent = mapComponent(bottom);
-          childComponents.add(bottomComponent);
-        }
-        return BdcPage(childComponents);
+        BdcBottomButton bottomComponent = (bottom != null) ? mapComponent(bottom) : null;
+        return BdcPage(childComponents, bottomComponent);
       });
-      return AcquisitionFlow(bdcPages);
+      acquisitionFlow = AcquisitionFlow(bdcPages);
     } else {
       return null;
     }
@@ -51,6 +50,11 @@ class AcquisitionRepositoryImpl extends AcquisitionRepository {
         return BdcBottomButton(text: item['title'], style: item['subtitle']);
       default: throw Exception('Cant\'t handle item of type $type');
     }
+  }
+
+  @override
+  Future<void> submit(Map<String, String> params) {
+    throw UnimplementedError();
   }
 
 }

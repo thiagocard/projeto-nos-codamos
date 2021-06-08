@@ -1,3 +1,5 @@
+import 'package:nos_codamos/data/model/bottom_button.dart';
+
 class AcquisitionFlow {
   final List<BdcPage> pages;
 
@@ -7,8 +9,9 @@ class AcquisitionFlow {
 /// Tela do do fluxo
 class BdcPage {
   final List<BdcComponent> children;
+  final BdcBottomButton bottom;
 
-  BdcPage(this.children);
+  BdcPage(this.children, this.bottom);
 }
 
 abstract class BdcComponent {

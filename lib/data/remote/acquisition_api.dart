@@ -20,8 +20,7 @@ class AcquisitionApi {
   }
 
   Future<http.Response> post(String uri, Map<String,String> body) async {
-    debugPrint("Call post");
-    print(body.toString());
+    print("Body Request:"+body.toString());
     try {
       var response = await http.post(Uri.parse('$_baseUrl$uri'), body: body);
       return response;

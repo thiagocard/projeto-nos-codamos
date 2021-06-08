@@ -20,7 +20,6 @@ class BaseScreen extends StatefulWidget {
 class BaseScreenState extends State<BaseScreen> {
   final int _index;
   BdcPage page;
-  TextEditingController _controller = TextEditingController();
   Map<String, TextEditingController> _controllers = {};
 
   BaseScreenState(this._index);
@@ -55,7 +54,6 @@ class BaseScreenState extends State<BaseScreen> {
             ? () {
           _saveParams();
           var provider = Provider.of<AppProvider>(context, listen: false);
-          print(provider.params);
           provider.repository.doAction(page.bottom.action, provider.params);
         }
             : () {

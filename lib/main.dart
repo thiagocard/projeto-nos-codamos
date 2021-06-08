@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:nos_codamos/data/repository/acquisition_repository.dart';
 import 'package:nos_codamos/ui/base_screen.dart';
@@ -41,7 +43,8 @@ class _SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<_SplashScreen> {
   Future<Widget> loadFromFuture() async {
-    String locale = "br";
+    String locale = 'br'; // Platform.localeName.substring(Platform.localeName.indexOf('_') + 1);
+    debugPrint('locale = $locale');
     await Provider.of<AppProvider>(context, listen: false).repository.postCountry(locale);
     return Future.value(new BaseScreen(0));
   }

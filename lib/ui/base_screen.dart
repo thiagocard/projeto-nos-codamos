@@ -42,11 +42,25 @@ class BaseScreenState extends State<BaseScreen> {
       body: Column(
         children: _render(context),
       ),
-      bottom: _renderBottom(),
+      bottom: _renderBottom(context),
     );
   }
 
-  Widget _renderBottom() {
+  Widget _errorScreen(BuildContext context, dynamic error, VoidCallback retry) {
+    return null;
+  }
+
+  Future _sendAnalytics() async {
+    try {
+      await Future.error('this could trigger error screen to be shown');
+    } catch (e) {
+      /// but it won't, because it got caught before bubbling up.
+      /// MAKE SURE TO DO THE SAME WITH COMPUTATIONS THAT ARE NOT VITAL
+      /// TO THE CURRENT FLOW!
+    }
+  }
+
+  Widget _renderBottom(BuildContext context) {
     return BottomButtonWidgetMapper.map(
         page.bottom,
         (page.children
@@ -62,8 +76,37 @@ class BaseScreenState extends State<BaseScreen> {
                     _saveParams();
                     var provider =
                         Provider.of<AppProvider>(context, listen: false);
-                    provider.repository
-                        .doAction(page.bottom.action, provider.params);
+
+                    presentTransitionScreen(
+                      context: context,
+                      semanticsLabel: 'Creating your account, please wait',
+
+                      /// What should happen when transitions
+                      /// successfully finished
+                      onTransitionEnd: () => Navigator.of(context).pop(),
+
+                      /// callback must return an error screen (Widget)
+                      /// in case a transition's computation
+                      /// raises an exception
+                      onErrorBuilder: (context, error, retry) =>
+                          _errorScreen(context, error, retry),
+
+                      /// Describe your transition steps here
+                      steps: [
+                        TransitionStep(
+                          text: 'First step',
+                          asyncComputation: _sendAnalytics,
+                        ),
+                        TransitionStep(
+                          text: 'Second...',
+                          asyncComputation: () => provider.repository.doAction(page.bottom.action, provider.params),
+                        ),
+                        TransitionStep(
+                          text: 'Done',
+                          asyncComputation: _sendAnalytics,
+                        ),
+                      ],
+                    );
                   }
                 : () {
                     _saveParams();

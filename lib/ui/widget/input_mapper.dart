@@ -21,6 +21,10 @@ class InputWidgetMapper {
     switch (keyboard) {
       case 'number':
         return TextInputType.number;
+      case 'datetime':
+        return TextInputType.datetime;
+      case 'email':
+        return TextInputType.emailAddress;
       case 'string':
       default:
         return TextInputType.text;

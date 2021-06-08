@@ -48,31 +48,31 @@ class BaseScreenState extends State<BaseScreen> {
   }
 
   Widget _renderBottom() {
-    return BottomButtonWidgetMapper.map(
-        page.bottom,
-        (page.children
-                    .whereType<BdcInputComponent>()
-                    .where(
-                        (element) => _controllers[element.id].value.text == "")
-                    .toList()
-                    .length >
-                0
-            ? null // Check elements
-            : page.bottom.action != null
-                ? () {
-                    _saveParams();
-                    var provider =
-                        Provider.of<AppProvider>(context, listen: false);
-                    provider.repository
-                        .doAction(page.bottom.action, provider.params);
-                  }
-                : () {
-                    _saveParams();
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => BaseScreen(_index + 1)));
-                  }));
+    return BottomButtonWidgetMapper.map(page.bottom, _onPressButton());
+  }
+
+  _onPressButton() {
+    return (page.children
+                .whereType<BdcInputComponent>()
+                .where((element) => _controllers[element.id].value.text == "")
+                .toList()
+                .length >
+            0
+        ? null // Check elements
+        : page.bottom.action != null
+            ? () {
+                _saveParams();
+                var provider = Provider.of<AppProvider>(context, listen: false);
+                provider.repository
+                    .doAction(page.bottom.action, provider.params);
+              }
+            : () {
+                _saveParams();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => BaseScreen(_index + 1)));
+              });
   }
 
   _saveParams() {

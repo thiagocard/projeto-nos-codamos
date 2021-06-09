@@ -2,6 +2,7 @@ import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/material.dart';
 import 'package:nos_codamos/data/model/acquisition_flow.dart';
 import 'package:nos_codamos/data/model/input.dart';
+import 'package:nos_codamos/domain/mapper/image_mapper.dart';
 import 'package:nos_codamos/domain/mapper/input_mapper.dart';
 import 'package:nos_codamos/domain/model/acquisition_flow_model.dart';
 import 'package:nos_codamos/domain/mapper/bottom_button_mapper.dart';
@@ -119,6 +120,8 @@ class BaseScreenState extends State<BaseScreen> {
       switch (child.type) {
         case BdcComponent.header:
           return HeaderWidgetMapper.map(child);
+        case BdcComponent.image:
+          return ImageWidgetMapper.map(child);
         case BdcComponent.input:
           var id = (child as BdcInputComponent).id;
           if (_controllers[id] == null) {
@@ -149,10 +152,8 @@ class BaseScreenState extends State<BaseScreen> {
                   AcquisitionFlow flow = await provider.doAction(
                       page.bottom.action, provider.params);
                   Provider.of<AcquisitionFlowModel>(context, listen: false)
-                      .flow
-                      .pages
-                      .addAll(flow.pages);
-                  Navigator.of(context).push(MaterialPageRoute(
+                      .concatPages(flow.pages);
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
                       builder: (context) => BaseScreen(_index + 1)));
                   return flow;
                 }

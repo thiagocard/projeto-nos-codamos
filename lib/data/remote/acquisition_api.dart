@@ -5,9 +5,13 @@ class AcquisitionApi {
   static const _baseUrl =
       'https://e890bfd8-1c22-485d-ae4b-3bdf47babaf0.mock.pstmn.io/entrypoint/';
 
+  final http.Client _httpClient;
+
+  AcquisitionApi(this._httpClient);
+
   Future<http.Response> get(String uri) async {
     try {
-      var response = await http.get(Uri.parse('$_baseUrl$uri'));
+      var response = await _httpClient.get(Uri.parse('$_baseUrl$uri'));
       // debugPrint("Status code ${data.statusCode}");
       // debugPrint("Body ${data.body}");
       return response;

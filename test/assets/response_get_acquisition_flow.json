@@ -1,0 +1,85 @@
+{
+  "pages": [
+    {
+      "children": [
+        {
+          "type": "Header",
+          "title": "Boas-vindas ao Nubank! Para começar, qual o seu CPF?",
+          "subtitle": "Precisamos dele para dar inicio ao seu cadastro"
+        },
+        {
+          "type": "Input",
+          "keyboard": "number",
+          "id": "document",
+          "format": "000.000.000-00"
+        }
+      ],
+      "bottom": {
+        "type": "BottomButton",
+        "text": "Continuar"
+      }
+    },
+    {
+      "children": [
+        {
+          "type": "Header",
+          "title": "Agora precisamos do seu nome"
+        },
+        {
+          "type": "Input",
+          "keyboard": "string",
+          "id": "name"
+        }
+      ],
+      "bottom": {
+        "type": "BottomButton",
+        "text": "Continuar"
+      }
+    },
+    {
+      "children": [
+        {
+          "type": "Header",
+          "title": "Certo, agora precisamos do seu email",
+          "subtitle": "Utilizamos o email para validar os dados"
+        },
+        {
+          "type": "Input",
+          "keyboard": "email",
+          "id": "email"
+        }
+      ],
+      "bottom": {
+        "type": "BottomButton",
+        "text": "Continuar"
+      }
+    },
+    {
+      "children": [
+        {
+          "type": "Header",
+          "title": "Agora preciso da sua data de nascimento"
+        },
+        {
+          "type": "Input",
+          "keyboard": "datetime",
+          "id": "birthday",
+          "format": "00/00/0000"
+        }
+      ],
+      "bottom": {
+        "type": "BottomButton",
+        "text": "Continuar",
+        "action": {
+          "method": "post",
+          "uri": "/submit",
+          "steps": [
+            "Processando os dados",
+            "Enviando seu pedido",
+            "Concluido"
+          ]
+        }
+      }
+    }
+  ]
+}

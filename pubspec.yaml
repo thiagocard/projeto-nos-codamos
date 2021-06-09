@@ -26,6 +26,7 @@ dependencies:
   provider:
   http:
   splashscreen:
+  extended_masked_text: ^2.2.1
   nuds:
     git:
       url: git@github.com:nubank/nuds.git

@@ -48,7 +48,7 @@ class AcquisitionRepositoryImpl extends AcquisitionRepository {
       case BdcComponent.header:
         return BdcHeader(title: item['title'], subtitle: item['subtitle']);
       case BdcComponent.input:
-        return BdcInput(id: item['id'], keyboard: item['keyboard']);
+        return BdcInput(id: item['id'], keyboard: item['keyboard'], format: item['format']);
       case BdcComponent.bottomButton:
         return BdcBottomButton(
             text: item['text'],

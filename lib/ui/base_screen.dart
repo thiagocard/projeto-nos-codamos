@@ -1,5 +1,7 @@
+import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/material.dart';
 import 'package:nos_codamos/data/model/acquisition_flow.dart';
+import 'package:nos_codamos/data/model/input.dart';
 import 'package:nos_codamos/main.dart';
 import 'package:nos_codamos/ui/widget/bottom_button_mapper.dart';
 import 'package:nos_codamos/ui/widget/header_mapper.dart';
@@ -120,7 +122,8 @@ class BaseScreenState extends State<BaseScreen> {
         case BdcComponent.input:
           var id = (child as BdcInputComponent).id;
           if (_controllers[id] == null) {
-            _controllers[id] = TextEditingController();
+            BdcInput inputChild = (child as BdcInput);
+            _controllers[id] = inputChild.format != null ? MaskedTextController(mask: inputChild.format) : TextEditingController();
             _controllers[id].addListener(() {
               setState(() {});
             });

@@ -7,6 +7,7 @@ import 'package:nos_codamos/data/model/bottom_button.dart';
 import 'package:nos_codamos/data/model/header.dart';
 import 'package:nos_codamos/data/model/image.dart';
 import 'package:nos_codamos/data/model/input.dart';
+import 'package:nos_codamos/data/model/welcome.dart';
 import 'package:nos_codamos/data/remote/acquisition_api.dart';
 
 abstract class AcquisitionRepository {
@@ -14,6 +15,8 @@ abstract class AcquisitionRepository {
 
   Future<AcquisitionFlow> doAction(
       BdcBottomButtonAction action, Map<String, String> params);
+
+  getWelcome();
 }
 
 class AcquisitionRepositoryImpl extends AcquisitionRepository {
@@ -82,5 +85,15 @@ class AcquisitionRepositoryImpl extends AcquisitionRepository {
       default:
         throw UnimplementedError();
     }
+  }
+
+  @override
+  Future<WelcomeData> getWelcome() async {
+    final response = await _api.get("welcome");
+    if (response.statusCode == 200) {
+      var content = jsonDecode(response.body);
+      return WelcomeData(content);
+    }
+    return WelcomeData(null);
   }
 }

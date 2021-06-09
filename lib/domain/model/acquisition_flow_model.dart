@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nos_codamos/data/model/acquisition_flow.dart';
 import 'package:nos_codamos/data/model/bottom_button.dart';
+import 'package:nos_codamos/data/model/welcome.dart';
 import 'package:nos_codamos/data/remote/acquisition_api.dart';
 import 'package:nos_codamos/data/repository/acquisition_repository.dart';
 
@@ -14,6 +15,11 @@ class AcquisitionFlowModel extends ChangeNotifier {
   Future<AcquisitionFlow> fetchAcquisitionFlow() async {
     flow = await _repository.getAcquisitionFlow(locale);
     return flow;
+  }
+
+  Future<WelcomeData> fetchWelcome() async {
+    var welcome = await _repository.getWelcome();
+    return welcome;
   }
 
   AcquisitionFlow getAcquisitionFlow() => flow;

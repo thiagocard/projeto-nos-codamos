@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:nos_codamos/data/model/welcome.dart';
 import 'package:nos_codamos/domain/model/acquisition_flow_model.dart';
+import 'package:nos_codamos/ui/select_country.dart';
 import 'package:provider/provider.dart';
 import 'package:splashscreen/splashscreen.dart';
 
@@ -15,8 +17,8 @@ class _AppSplashScreenState extends State<AppSplashScreen> {
     final provider = Provider.of<AcquisitionFlowModel>(context, listen: false);
     provider.locale = 'br'; // Platform.localeName.substring(Platform.localeName.indexOf('_') + 1);;
     debugPrint('locale = ${provider.locale}');
-    await provider.fetchAcquisitionFlow();
-    return Future.value(new BaseScreen(0));
+    WelcomeData welcomeData = await provider.fetchWelcome();
+    return Future.value(new SelectCountry(welcomeData, provider.locale));
   }
 
   @override

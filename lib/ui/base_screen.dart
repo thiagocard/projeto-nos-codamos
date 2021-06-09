@@ -60,7 +60,7 @@ class BaseScreenState extends State<BaseScreen> {
   }
 
   Widget _renderBottom(BuildContext context) {
-    return BottomButtonWidgetMapper.map(page.bottom, _onPressButton());
+    return page.bottom != null ? BottomButtonWidgetMapper.map(page.bottom, _onPressButton()) : null;
   }
 
   _onPressButton() {
@@ -71,10 +71,11 @@ class BaseScreenState extends State<BaseScreen> {
                 .length >
             0
         ? null // Check elements
-        : page.bottom.action != null
+        : (page.bottom != null && page.bottom.action != null)
             ? () {
                 _saveParams();
-                var provider = Provider.of<AcquisitionFlowModel>(context, listen: false);
+                var provider =
+                    Provider.of<AcquisitionFlowModel>(context, listen: false);
 
                 presentTransitionScreen(
                   context: context,
@@ -82,7 +83,7 @@ class BaseScreenState extends State<BaseScreen> {
 
                   /// What should happen when transitions
                   /// successfully finished
-                  onTransitionEnd: () => Navigator.of(context).pop(),
+                  onTransitionEnd: () {},
 
                   /// callback must return an error screen (Widget)
                   /// in case a transition's computation
@@ -107,8 +108,8 @@ class BaseScreenState extends State<BaseScreen> {
   _saveParams() {
     page.children.forEach((child) {
       if (child is BdcInputComponent) {
-        Provider.of<AcquisitionFlowModel>(context, listen: false).params[child.id] =
-            _controllers[child.id].value.text;
+        Provider.of<AcquisitionFlowModel>(context, listen: false)
+            .params[child.id] = _controllers[child.id].value.text;
       }
     });
   }
@@ -122,7 +123,9 @@ class BaseScreenState extends State<BaseScreen> {
           var id = (child as BdcInputComponent).id;
           if (_controllers[id] == null) {
             BdcInput inputChild = (child as BdcInput);
-            _controllers[id] = inputChild.format != null ? MaskedTextController(mask: inputChild.format) : TextEditingController();
+            _controllers[id] = inputChild.format != null
+                ? MaskedTextController(mask: inputChild.format)
+                : TextEditingController();
             _controllers[id].addListener(() {
               setState(() {});
             });
@@ -142,7 +145,17 @@ class BaseScreenState extends State<BaseScreen> {
         final transitionStep = TransitionStep(
           text: step,
           asyncComputation: index == steps.length - 1
-              ? () => provider.doAction(page.bottom.action, provider.params)
+              ? () async {
+                  AcquisitionFlow flow = await provider.doAction(
+                      page.bottom.action, provider.params);
+                  Provider.of<AcquisitionFlowModel>(context, listen: false)
+                      .flow
+                      .pages
+                      .addAll(flow.pages);
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => BaseScreen(_index + 1)));
+                  return flow;
+                }
               : _displayStepName,
         );
         transitionSteps.add(transitionStep);

@@ -1,16 +1,18 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' show Response;
 import 'package:nos_codamos/data/model/acquisition_flow.dart';
 import 'package:nos_codamos/data/model/bottom_button.dart';
 import 'package:nos_codamos/data/model/header.dart';
+import 'package:nos_codamos/data/model/image.dart';
 import 'package:nos_codamos/data/model/input.dart';
 import 'package:nos_codamos/data/remote/acquisition_api.dart';
 
 abstract class AcquisitionRepository {
   Future<AcquisitionFlow> getAcquisitionFlow(String countryCode);
 
-  Future<Response> doAction(
+  Future<AcquisitionFlow> doAction(
       BdcBottomButtonAction action, Map<String, String> params);
 }
 
@@ -22,6 +24,11 @@ class AcquisitionRepositoryImpl extends AcquisitionRepository {
   @override
   Future<AcquisitionFlow> getAcquisitionFlow(String countryCode) async {
     final response = await _api.get(countryCode);
+    return handleResponse(response);
+  }
+
+  AcquisitionFlow handleResponse(Response response) {
+    debugPrint('Response: ${response.body}');
     if (response.statusCode == 200) {
       final screen = jsonDecode(response.body);
       final List pages = screen['pages'];
@@ -48,6 +55,8 @@ class AcquisitionRepositoryImpl extends AcquisitionRepository {
         return BdcHeader(title: item['title'], subtitle: item['subtitle']);
       case BdcComponent.input:
         return BdcInput(id: item['id'], keyboard: item['keyboard'], format: item['format']);
+      case BdcComponent.image:
+        return BdcImage(name: item['name']);
       case BdcComponent.bottomButton:
         return BdcBottomButton(
             text: item['text'],
@@ -63,13 +72,13 @@ class AcquisitionRepositoryImpl extends AcquisitionRepository {
   }
 
   @override
-  Future<Response> doAction(
-      BdcBottomButtonAction action, Map<String, String> params) {
+  Future<AcquisitionFlow> doAction(
+      BdcBottomButtonAction action, Map<String, String> params) async {
     switch (action.method) {
       case 'post':
-        return _api.post(action.uri, params);
+        return handleResponse(await _api.post(action.uri, params));
       case 'get':
-        return _api.get(action.uri);
+        return handleResponse(await _api.get(action.uri));
       default:
         throw UnimplementedError();
     }

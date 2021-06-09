@@ -25,6 +25,7 @@ abstract class BdcComponent {
   static const header = 'Header';
   static const input = 'Input';
   static const bottomButton = 'BottomButton';
+  static const image = 'Image';
 
   String type;
 

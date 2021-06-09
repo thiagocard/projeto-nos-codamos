@@ -18,7 +18,7 @@ class AcquisitionFlowModel extends ChangeNotifier {
 
   AcquisitionFlow getAcquisitionFlow() => flow;
 
-  doAction(BdcBottomButtonAction action, Map<String, String> params) {
+  Future<AcquisitionFlow> doAction(BdcBottomButtonAction action, Map<String, String> params) {
     return _repository.doAction(action, params);
   }
 

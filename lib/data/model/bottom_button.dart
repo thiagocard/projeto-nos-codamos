@@ -7,7 +7,6 @@ class BdcBottomButton extends BdcComponent {
 
   BdcBottomButton({this.text, this.style, this.action})
       : super(BdcComponent.bottomButton);
-
 }
 
 class BdcBottomButtonAction {

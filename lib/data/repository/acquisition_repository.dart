@@ -8,7 +8,7 @@ import 'package:nos_codamos/data/model/input.dart';
 import 'package:nos_codamos/data/remote/acquisition_api.dart';
 
 abstract class AcquisitionRepository {
-  Future<void> postCountry(String countryCode);
+  Future<AcquisitionFlow> getAcquisitionFlow(String countryCode);
 
   Future<Response> doAction(
       BdcBottomButtonAction action, Map<String, String> params);
@@ -16,12 +16,11 @@ abstract class AcquisitionRepository {
 
 class AcquisitionRepositoryImpl extends AcquisitionRepository {
   final AcquisitionApi _api;
-  AcquisitionFlow acquisitionFlow;
 
   AcquisitionRepositoryImpl(this._api);
 
   @override
-  Future<void> postCountry(String countryCode) async {
+  Future<AcquisitionFlow> getAcquisitionFlow(String countryCode) async {
     final response = await _api.get(countryCode);
     if (response.statusCode == 200) {
       final screen = jsonDecode(response.body);
@@ -36,7 +35,7 @@ class AcquisitionRepositoryImpl extends AcquisitionRepository {
             (bottom != null) ? mapComponent(bottom) : null;
         return BdcPage(childComponents, bottomComponent);
       }).toList();
-      acquisitionFlow = AcquisitionFlow(bdcPages);
+      return AcquisitionFlow(bdcPages);
     } else {
       return null;
     }

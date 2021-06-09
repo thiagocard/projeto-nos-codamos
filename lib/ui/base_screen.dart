@@ -2,10 +2,10 @@ import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/material.dart';
 import 'package:nos_codamos/data/model/acquisition_flow.dart';
 import 'package:nos_codamos/data/model/input.dart';
-import 'package:nos_codamos/main.dart';
-import 'package:nos_codamos/ui/widget/bottom_button_mapper.dart';
-import 'package:nos_codamos/ui/widget/header_mapper.dart';
-import 'package:nos_codamos/ui/widget/input_mapper.dart';
+import 'package:nos_codamos/domain/mapper/input_mapper.dart';
+import 'package:nos_codamos/domain/model/acquisition_flow_model.dart';
+import 'package:nos_codamos/domain/mapper/bottom_button_mapper.dart';
+import 'package:nos_codamos/domain/mapper/header_mapper.dart';
 import 'package:nuds_mobile/nuds_mobile.dart';
 import 'package:provider/provider.dart';
 
@@ -28,9 +28,8 @@ class BaseScreenState extends State<BaseScreen> {
   @override
   void initState() {
     super.initState();
-    page = Provider.of<AppProvider>(context, listen: false)
-        .repository
-        .acquisitionFlow
+    page = Provider.of<AcquisitionFlowModel>(context, listen: false)
+        .getAcquisitionFlow()
         .pages[_index];
   }
 
@@ -75,7 +74,7 @@ class BaseScreenState extends State<BaseScreen> {
         : page.bottom.action != null
             ? () {
                 _saveParams();
-                var provider = Provider.of<AppProvider>(context, listen: false);
+                var provider = Provider.of<AcquisitionFlowModel>(context, listen: false);
 
                 presentTransitionScreen(
                   context: context,
@@ -108,7 +107,7 @@ class BaseScreenState extends State<BaseScreen> {
   _saveParams() {
     page.children.forEach((child) {
       if (child is BdcInputComponent) {
-        Provider.of<AppProvider>(context, listen: false).params[child.id] =
+        Provider.of<AcquisitionFlowModel>(context, listen: false).params[child.id] =
             _controllers[child.id].value.text;
       }
     });
@@ -135,7 +134,7 @@ class BaseScreenState extends State<BaseScreen> {
     }).toList();
   }
 
-  List<TransitionStep> _buildTransitionSteps(AppProvider provider,
+  List<TransitionStep> _buildTransitionSteps(AcquisitionFlowModel provider,
       [List<String> steps]) {
     if (steps != null) {
       List<TransitionStep> transitionSteps = [];
@@ -143,8 +142,7 @@ class BaseScreenState extends State<BaseScreen> {
         final transitionStep = TransitionStep(
           text: step,
           asyncComputation: index == steps.length - 1
-              ? () => provider.repository
-                  .doAction(page.bottom.action, provider.params)
+              ? () => provider.doAction(page.bottom.action, provider.params)
               : _displayStepName,
         );
         transitionSteps.add(transitionStep);

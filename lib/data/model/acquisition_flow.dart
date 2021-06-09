@@ -19,7 +19,6 @@ abstract class BdcInputComponent extends BdcComponent {
   String type;
 
   BdcInputComponent(this.id, this.type) : super(type);
-
 }
 
 abstract class BdcComponent {

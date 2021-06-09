@@ -14,21 +14,19 @@ class InputWidgetMapper {
         controller: controller,
       ),
     );
-
   }
 
   static _keyboardType(String keyboard) {
     switch (keyboard) {
-      case 'number':
+      case BdcInput.keyobardNumber:
         return TextInputType.number;
-      case 'datetime':
+      case BdcInput.keyobardDateTime:
         return TextInputType.datetime;
-      case 'email':
+      case BdcInput.keyobardEmail:
         return TextInputType.emailAddress;
-      case 'string':
+      case BdcInput.keyobardString:
       default:
         return TextInputType.text;
     }
   }
-
 }

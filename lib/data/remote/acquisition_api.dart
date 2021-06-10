@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 class AcquisitionApi {
   static const _baseUrl =
-      'http://192.168.100.33:9000';
+      'https://e890bfd8-1c22-485d-ae4b-3bdf47babaf0.mock.pstmn.io/entrypoint';
 
   final http.Client _httpClient;
 

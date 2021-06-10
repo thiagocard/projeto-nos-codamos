@@ -105,7 +105,12 @@ class _SelectCountryState extends State<SelectCountry> {
                   title: Text(widget.welcomeData.content[_defaultCountry]["welcome"]),
                 ),
                 // Image.asset('assets/creditcard.jpg'),
-                Image(image: NuDSImages.pf_darkbg_horizontal_floating_card),
+                Padding(
+                    padding: const EdgeInsets.symmetric(vertical: Spacings.x24),
+                    child: Image(
+                        image: NuDSImages.pf_darkbg_horizontal_floating_card
+                    ),
+                ),
               ],
             )),
       ) ,

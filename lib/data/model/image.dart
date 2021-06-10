@@ -1,7 +1,7 @@
 import 'acquisition_flow.dart';
 
-class BdcImage extends BdcInputComponent {
+class BdcImage extends BdcComponent {
   final String src;
 
-  BdcImage({this.src}) : super(src, BdcComponent.image);
+  BdcImage({this.src}) : super(BdcComponent.image);
 }

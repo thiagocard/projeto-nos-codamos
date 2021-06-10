@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
@@ -20,9 +22,10 @@ class AcquisitionApi {
   }
 
   Future<http.Response> post(String uri, Map<String, String> body) async {
-    print("Body Request:" + body.toString());
+    String bodyJSON = jsonEncode(body);
+    print("Body Request:" + bodyJSON);
     try {
-      var response = await http.post(Uri.parse('$_baseUrl$uri'), body: body);
+      var response = await http.post(Uri.parse('$_baseUrl$uri'), body: bodyJSON);
       return response;
     } catch (e) {
       debugPrint("Error in post $_baseUrl$uri");

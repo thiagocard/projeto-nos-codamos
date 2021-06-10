@@ -12,12 +12,9 @@ class AcquisitionApi {
   Future<http.Response> get(String uri) async {
     try {
       var response = await _httpClient.get(Uri.parse('$_baseUrl$uri'));
-      // debugPrint("Status code ${data.statusCode}");
-      // debugPrint("Body ${data.body}");
       return response;
     } catch (e) {
       debugPrint("Error in get country");
-      debugPrint(e.toString());
     }
     return null;
   }

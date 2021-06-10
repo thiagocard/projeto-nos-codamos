@@ -13,7 +13,7 @@ void main() {
 
     var bottomBar = BottomButtonWidgetMapper.map(bdcBottomButton, () {});
 
-    tester.pumpWidget(bottomBar);
+    await tester.pumpWidget(bottomBar);
 
     expect(find.text(text), findsOneWidget);
   });

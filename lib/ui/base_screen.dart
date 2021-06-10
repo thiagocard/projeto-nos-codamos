@@ -52,15 +52,15 @@ class BaseScreenState extends State<BaseScreen> {
   Widget _errorScreen(BuildContext context, dynamic error, VoidCallback retry) {
     debugPrint('Erro: $error');
     return nuds.ClosureScreen.image(
-      nuds_mobile.NuDSImages.rollerblader,
+      nuds_mobile.NuDSImages.pf_ludic_others_yoga,
       appBar: nuds.TopBar(
         leadingIcon: nuds_mobile.NuDSIcons.close,
         leadingOnPressed: () => Navigator.of(context).pop(),
       ),
       title: 'Opa!',
-      description: 'Deu pau!!!',
+      description: 'Aconteceu algum problema! Por favor, tente novamente mais tarde.',
       bottom: nuds.BottomButton(
-        text: 'SAIR',
+        text: 'VOLTAR',
         primary: true,
         onPressed: () => Navigator.of(context).pop(),
       ),

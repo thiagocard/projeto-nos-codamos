@@ -86,25 +86,28 @@ class _SelectCountryState extends State<SelectCountry> {
   @override
   Widget build(BuildContext context) {
     return Screen(
-      body: Container(
-          child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Button(
-                type: ButtonType.ghost,
-                onPressed: _openModal,
-                trailingIcon: Icon(NuDSIcons.expand_more),
-                child: Text(_textDefaultCountry),
-              )
-            ],
-          ),
-          Header(
-            title: Text(widget.welcomeData.content[_defaultCountry]["welcome"]),
-          )
-        ],
-      )),
+      body: SingleChildScrollView(
+        child: Container(
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Button(
+                      type: ButtonType.ghost,
+                      onPressed: _openModal,
+                      trailingIcon: Icon(NuDSIcons.expand_more),
+                      child: Text(_textDefaultCountry),
+                    )
+                  ],
+                ),
+                Header(
+                  title: Text(widget.welcomeData.content[_defaultCountry]["welcome"]),
+                ),
+                Image.asset('assets/creditcard.jpg'),
+              ],
+            )),
+      ) ,
       bottom: BottomBar(
         primary: BottomBarAction(
           child: Text(widget.welcomeData.content[_defaultCountry]["start"]),

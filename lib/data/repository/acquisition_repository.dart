@@ -59,7 +59,7 @@ class AcquisitionRepositoryImpl extends AcquisitionRepository {
       case BdcComponent.input:
         return BdcInput(id: item['id'], keyboard: item['keyboard'], format: item['format']);
       case BdcComponent.image:
-        return BdcImage(name: item['name']);
+        return BdcImage(src: item['src']);
       case BdcComponent.bottomButton:
         return BdcBottomButton(
             text: item['text'],

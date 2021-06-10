@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:nos_codamos/data/model/welcome.dart';
 import 'package:nos_codamos/domain/model/acquisition_flow_model.dart';
 import 'package:nos_codamos/ui/select_country.dart';
+import 'package:nuds_mobile/nuds_mobile.dart';
 import 'package:provider/provider.dart';
-import 'package:splashscreen/splashscreen.dart';
 
 import 'base_screen.dart';
 
@@ -13,27 +13,66 @@ class AppSplashScreen extends StatefulWidget {
 }
 
 class _AppSplashScreenState extends State<AppSplashScreen> {
-  Future<Widget> loadFromFuture() async {
+  loadFromFuture() async {
     final provider = Provider.of<AcquisitionFlowModel>(context, listen: false);
-    provider.locale = 'br'; // Platform.localeName.substring(Platform.localeName.indexOf('_') + 1);;
+    provider.locale =
+        'br'; // Platform.localeName.substring(Platform.localeName.indexOf('_') + 1);;
     debugPrint('locale = ${provider.locale}');
     WelcomeData welcomeData = await provider.fetchWelcome();
-    return Future.value(new SelectCountry(welcomeData, provider.locale));
+    if (welcomeData.content == null) {
+      presentBottomSheetPromptModal(
+        maxSize: 1,
+        context: context,
+        builder: (ctx) {
+          return PromptModal.retrial(
+            title: const Text('An error has occurred'),
+            subtitle: const Text(
+              'Retry request',
+            ),
+            retrialActionTitle: 'Retry',
+            onRetrialActionTap: () {
+              loadFromFuture();
+            },
+          );
+        },
+      );
+      return false;
+    }
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (ctx) => SelectCountry(welcomeData, provider.locale)));
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    loadFromFuture();
   }
 
   @override
   Widget build(BuildContext context) {
-    return new SplashScreen(
-        navigateAfterFuture: loadFromFuture(),
-        title: new Text(
-          'Welcome In SplashScreen',
-          style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+    return Screen(
+        body:Container(
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image(image: NuDSImages.pf_ludic_others_highfive),
+              Text(
+                'Nubank Acquisition',
+                style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 20),
+                child: CircularProgressIndicator(),
+              )
+              ,
+            ],
+          ),
         ),
-        image: new Image.network('https://i.imgur.com/TyCSG9A.png'),
-        backgroundColor: Colors.white,
-        styleTextUnderTheLoader: new TextStyle(),
-        photoSize: 100.0,
-        onClick: () => print("Flutter Egypt"),
-        loaderColor: Colors.red);
+    );
   }
 }

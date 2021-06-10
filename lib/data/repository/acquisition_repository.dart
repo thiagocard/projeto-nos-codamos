@@ -90,9 +90,11 @@ class AcquisitionRepositoryImpl extends AcquisitionRepository {
   @override
   Future<WelcomeData> getWelcome() async {
     final response = await _api.get("/main");
-    if (response.statusCode == 200) {
-      var content = jsonDecode(response.body);
-      return WelcomeData(content);
+    if (response != null) {
+      if (response.statusCode == 200) {
+        var content = jsonDecode(response.body);
+        return WelcomeData(content);
+      }
     }
     return WelcomeData(null);
   }

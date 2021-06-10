@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 class AcquisitionApi {
   static const _baseUrl =
-      'http://192.168.100.33:9000';
+      'http://10.0.2.2:9000';
 
   final http.Client _httpClient;
 

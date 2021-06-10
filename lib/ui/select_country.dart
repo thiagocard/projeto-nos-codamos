@@ -9,6 +9,8 @@ class SelectCountry extends StatefulWidget {
   WelcomeData welcomeData;
   String startDefaultCountry;
 
+  static const routeName = '/select-country';
+
   SelectCountry(this.welcomeData, this.startDefaultCountry);
 
   @override

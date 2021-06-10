@@ -5,8 +5,6 @@ import 'package:nos_codamos/ui/select_country.dart';
 import 'package:nuds_mobile/nuds_mobile.dart';
 import 'package:provider/provider.dart';
 
-import 'base_screen.dart';
-
 class AppSplashScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _AppSplashScreenState();
@@ -41,6 +39,7 @@ class _AppSplashScreenState extends State<AppSplashScreen> {
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
+            settings: RouteSettings(name: SelectCountry.routeName),
             builder: (ctx) => SelectCountry(welcomeData, provider.locale)));
   }
 

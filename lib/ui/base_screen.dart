@@ -7,6 +7,7 @@ import 'package:nos_codamos/domain/mapper/input_mapper.dart';
 import 'package:nos_codamos/domain/model/acquisition_flow_model.dart';
 import 'package:nos_codamos/domain/mapper/bottom_button_mapper.dart';
 import 'package:nos_codamos/domain/mapper/header_mapper.dart';
+import 'package:nos_codamos/ui/select_country.dart';
 import 'package:nuds/nuds.dart' as nuds;
 import 'package:nuds_mobile/nuds_mobile.dart' as nuds_mobile;
 import 'package:provider/provider.dart';
@@ -58,7 +59,8 @@ class BaseScreenState extends State<BaseScreen> {
         leadingOnPressed: () => Navigator.of(context).pop(),
       ),
       title: 'Opa!',
-      description: 'Aconteceu algum problema! Por favor, tente novamente mais tarde.',
+      description:
+          'Aconteceu algum problema! Por favor, tente novamente mais tarde.',
       bottom: nuds.BottomButton(
         text: 'VOLTAR',
         primary: true,
@@ -91,28 +93,32 @@ class BaseScreenState extends State<BaseScreen> {
         ? null // Check elements
         : (page.bottom != null && page.bottom.action != null)
             ? () {
-                _saveParams();
-                var provider =
-                    Provider.of<AcquisitionFlowModel>(context, listen: false);
+                if (page.bottom.action.uri == 'go-to-home') {
+                  Navigator.of(context).popUntil((route) => route.settings.name == SelectCountry.routeName);
+                } else {
+                  _saveParams();
+                  var provider =
+                      Provider.of<AcquisitionFlowModel>(context, listen: false);
 
-                nuds_mobile.presentTransitionScreen(
-                  context: context,
-                  semanticsLabel: 'Creating your account, please wait',
+                  nuds_mobile.presentTransitionScreen(
+                    context: context,
+                    semanticsLabel: 'Creating your account, please wait',
 
-                  /// What should happen when transitions
-                  /// successfully finished
-                  onTransitionEnd: () {},
+                    /// What should happen when transitions
+                    /// successfully finished
+                    onTransitionEnd: () {},
 
-                  /// callback must return an error screen (Widget)
-                  /// in case a transition's computation
-                  /// raises an exception
-                  onErrorBuilder: (context, error, retry) =>
-                      _errorScreen(context, error, retry),
+                    /// callback must return an error screen (Widget)
+                    /// in case a transition's computation
+                    /// raises an exception
+                    onErrorBuilder: (context, error, retry) =>
+                        _errorScreen(context, error, retry),
 
-                  /// Describe your transition steps here
-                  steps:
-                      _buildTransitionSteps(provider, page.bottom.action.steps),
-                );
+                    /// Describe your transition steps here
+                    steps: _buildTransitionSteps(
+                        provider, page.bottom.action.steps),
+                  );
+                }
               }
             : () {
                 _saveParams();
@@ -127,7 +133,7 @@ class BaseScreenState extends State<BaseScreen> {
     var provider = Provider.of<AcquisitionFlowModel>(context, listen: false);
     page.children.forEach((child) {
       if (child is BdcInputComponent) {
-          provider.params[child.id] = _controllers[child.id].value.text;
+        provider.params[child.id] = _controllers[child.id].value.text;
       }
     });
     provider.params['country-code'] = provider.locale;
@@ -158,7 +164,8 @@ class BaseScreenState extends State<BaseScreen> {
     }).toList();
   }
 
-  List<nuds_mobile.TransitionStep> _buildTransitionSteps(AcquisitionFlowModel provider,
+  List<nuds_mobile.TransitionStep> _buildTransitionSteps(
+      AcquisitionFlowModel provider,
       [List<String> steps]) {
     if (steps != null) {
       List<nuds_mobile.TransitionStep> transitionSteps = [];

@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'dart:io' show Platform;
 
 class AcquisitionApi {
-  static const _baseUrl =
-      'http://10.0.2.2:9000';
+  static get _baseUrl =>
+      Platform.isAndroid ? 'http://10.0.2.2:9000' : 'https://4c3f7d4e1881.ngrok.io';
 
   final http.Client _httpClient;
 

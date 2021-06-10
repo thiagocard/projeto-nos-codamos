@@ -25,7 +25,7 @@ class AcquisitionApi {
     String bodyJSON = jsonEncode(body);
     print("Body Request:" + bodyJSON);
     try {
-      var response = await http.post(Uri.parse('$_baseUrl$uri'), body: bodyJSON);
+      var response = await http.post(Uri.parse('$_baseUrl$uri'), headers: {"Content-type": "application/json"}, body: bodyJSON);
       return response;
     } catch (e) {
       debugPrint("Error in post $_baseUrl$uri");

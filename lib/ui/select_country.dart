@@ -16,24 +16,20 @@ class SelectCountry extends StatefulWidget {
 }
 
 class _SelectCountryState extends State<SelectCountry> {
-  static const countries = [
-    {"text": "Brasil", "value": "br"},
-    {"text": "México", "value": "mx"},
-    {"text": "Colômbia", "value": "co"}
-  ];
+  var countries = [];
 
   int _favourite = -1;
-  String _defaultCountry = "co";
-  String _textDefaultCountry = "Colômbia";
+  String _defaultCountry = "br";
+  String _textDefaultCountry = "Brasil";
   bool _loading = false;
   AcquisitionFlowModel _provider;
 
   @override
   void initState() {
     super.initState();
+    countries = widget.welcomeData.content["countries"];
     _provider = Provider.of<AcquisitionFlowModel>(context, listen: false);
     countries.forEach((e) {
-      print(widget.startDefaultCountry);
       if (e["value"] == widget.startDefaultCountry) {
         setState(() {
           _defaultCountry = e["value"];

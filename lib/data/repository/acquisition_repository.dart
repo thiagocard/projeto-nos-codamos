@@ -26,7 +26,7 @@ class AcquisitionRepositoryImpl extends AcquisitionRepository {
 
   @override
   Future<AcquisitionFlow> getAcquisitionFlow(String countryCode) async {
-    final response = await _api.get(countryCode);
+    final response = await _api.get("/pages?country-code=$countryCode");
     return handleResponse(response);
   }
 
@@ -89,7 +89,7 @@ class AcquisitionRepositoryImpl extends AcquisitionRepository {
 
   @override
   Future<WelcomeData> getWelcome() async {
-    final response = await _api.get("welcome");
+    final response = await _api.get("/main");
     if (response.statusCode == 200) {
       var content = jsonDecode(response.body);
       return WelcomeData(content);

@@ -7,6 +7,6 @@ class ImageWidgetMapper {
   ImageWidgetMapper._();
 
   static Image map(BdcImage bdcImage) {
-    return Image.asset(bdcImage.name);
+    return Image(image: NuDSImages.byName(bdcImage.name));
   }
 }

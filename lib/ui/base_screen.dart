@@ -7,7 +7,8 @@ import 'package:nos_codamos/domain/mapper/input_mapper.dart';
 import 'package:nos_codamos/domain/model/acquisition_flow_model.dart';
 import 'package:nos_codamos/domain/mapper/bottom_button_mapper.dart';
 import 'package:nos_codamos/domain/mapper/header_mapper.dart';
-import 'package:nuds_mobile/nuds_mobile.dart';
+import 'package:nuds/nuds.dart' as nuds;
+import 'package:nuds_mobile/nuds_mobile.dart' as nuds_mobile;
 import 'package:provider/provider.dart';
 
 class BaseScreen extends StatefulWidget {
@@ -36,8 +37,8 @@ class BaseScreenState extends State<BaseScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Screen(
-      top: TopBar(
+    return nuds_mobile.Screen(
+      top: nuds_mobile.TopBar(
         backgroundColor: Colors.white,
         elevation: 0,
       ),
@@ -49,7 +50,21 @@ class BaseScreenState extends State<BaseScreen> {
   }
 
   Widget _errorScreen(BuildContext context, dynamic error, VoidCallback retry) {
-    return null;
+    debugPrint('Erro: $error');
+    return nuds.ClosureScreen.image(
+      nuds_mobile.NuDSImages.rollerblader,
+      appBar: nuds.TopBar(
+        leadingIcon: nuds_mobile.NuDSIcons.close,
+        leadingOnPressed: () => Navigator.of(context).pop(),
+      ),
+      title: 'Opa!',
+      description: 'Deu pau!!!',
+      bottom: nuds.BottomButton(
+        text: 'SAIR',
+        primary: true,
+        onPressed: () => Navigator.of(context).pop(),
+      ),
+    );
   }
 
   Future _displayStepName() async {
@@ -61,7 +76,9 @@ class BaseScreenState extends State<BaseScreen> {
   }
 
   Widget _renderBottom(BuildContext context) {
-    return page.bottom != null ? BottomButtonWidgetMapper.map(page.bottom, _onPressButton()) : null;
+    return page.bottom != null
+        ? BottomButtonWidgetMapper.map(page.bottom, _onPressButton())
+        : null;
   }
 
   _onPressButton() {
@@ -78,7 +95,7 @@ class BaseScreenState extends State<BaseScreen> {
                 var provider =
                     Provider.of<AcquisitionFlowModel>(context, listen: false);
 
-                presentTransitionScreen(
+                nuds_mobile.presentTransitionScreen(
                   context: context,
                   semanticsLabel: 'Creating your account, please wait',
 
@@ -140,12 +157,12 @@ class BaseScreenState extends State<BaseScreen> {
     }).toList();
   }
 
-  List<TransitionStep> _buildTransitionSteps(AcquisitionFlowModel provider,
+  List<nuds_mobile.TransitionStep> _buildTransitionSteps(AcquisitionFlowModel provider,
       [List<String> steps]) {
     if (steps != null) {
-      List<TransitionStep> transitionSteps = [];
+      List<nuds_mobile.TransitionStep> transitionSteps = [];
       steps.asMap().forEach((index, step) {
-        final transitionStep = TransitionStep(
+        final transitionStep = nuds_mobile.TransitionStep(
           text: step,
           asyncComputation: index == steps.length - 1
               ? () async {

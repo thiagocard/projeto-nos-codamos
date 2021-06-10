@@ -124,12 +124,13 @@ class BaseScreenState extends State<BaseScreen> {
   }
 
   _saveParams() {
+    var provider = Provider.of<AcquisitionFlowModel>(context, listen: false);
     page.children.forEach((child) {
       if (child is BdcInputComponent) {
-        Provider.of<AcquisitionFlowModel>(context, listen: false)
-            .params[child.id] = _controllers[child.id].value.text;
+          provider.params[child.id] = _controllers[child.id].value.text;
       }
     });
+    provider.params['country-code'] = provider.locale;
   }
 
   List<Widget> _render(BuildContext context) {

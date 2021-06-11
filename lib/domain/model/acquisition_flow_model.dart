@@ -10,6 +10,7 @@ class AcquisitionFlowModel extends ChangeNotifier {
 
   final AcquisitionRepository _repository = AcquisitionRepositoryImpl(AcquisitionApi(http.Client()));
   final Map<String, String> params = {};
+  WelcomeData welcomeData;
   AcquisitionFlow flow;
   String locale = 'br';
 

@@ -94,7 +94,8 @@ class BaseScreenState extends State<BaseScreen> {
         : (page.bottom != null && page.bottom.action != null)
             ? () {
                 if (page.bottom.action.uri == 'go-to-home') {
-                  Navigator.of(context).popUntil((route) => route.settings.name == SelectCountry.routeName);
+                  var provider = Provider.of<AcquisitionFlowModel>(context, listen: false);
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx) => SelectCountry(provider.welcomeData, provider.locale)));
                 } else {
                   _saveParams();
                   var provider =

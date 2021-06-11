@@ -17,6 +17,7 @@ class _AppSplashScreenState extends State<AppSplashScreen> {
         'br'; // Platform.localeName.substring(Platform.localeName.indexOf('_') + 1);;
     debugPrint('locale = ${provider.locale}');
     WelcomeData welcomeData = await provider.fetchWelcome();
+    provider.welcomeData = welcomeData;
     if (welcomeData.content == null) {
       presentBottomSheetPromptModal(
         maxSize: 1,
